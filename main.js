@@ -10,7 +10,7 @@ const options = {
   gridAmount: 20,
   buildingAmount: 50,
   scale: 0.8,
-  cameraSpeed: 0.8
+  cameraSpeed: 0.6
 };
 
 const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 500);
@@ -65,7 +65,7 @@ scene.add(ambientLight, lightFront, lightBack);
 // Create the fog
 const fog = 0xF02050;
 scene.background = new THREE.Color(fog);
-scene.fog = new THREE.Fog(fog, 10, 16);
+scene.fog = new THREE.Fog(fog, 10, 19);
 
 const plane = new THREE.BoxGeometry(0.01, 0.01, 1);
 const floorGeometry = new THREE.PlaneGeometry(100, 100);
@@ -76,6 +76,7 @@ let city = new THREE.Object3D();
 
 // Add the floor
 const floorMat = new THREE.MeshStandardMaterial({color:0x000000});
+const floorMatRed = new THREE.MeshStandardMaterial({color:0xff0000});
 
 const floorMesh = new Reflector(floorGeometry, {
   clipBias: 0.003,
@@ -94,12 +95,32 @@ for (let x = -options.gridAmount; x < options.gridAmount; x++)
 {
   for (let z = -options.gridAmount; z < options.gridAmount; z++)
   {
-    let floorSegment = new THREE.Mesh(plane, floorMat);
+    let floorSegment;
+    let floorSegment2;
+    if (x == 0)
+    {
+      floorSegment = new THREE.Mesh(plane, floorMatRed);
+    }
+    else
+    {
+      floorSegment = new THREE.Mesh(plane, floorMat);
+    }
+
+    if (z == 0)
+    {
+      floorSegment2 = new THREE.Mesh(plane, floorMatRed);
+    }
+    else
+    {
+      floorSegment2 = new THREE.Mesh(plane, floorMat);  
+    }
+
+
+    
     floorSegment.receiveShadow = true;
     floorSegment.position.set(x * options.scale, 0, z * options.scale);
     floor.add(floorSegment);
 
-    let floorSegment2 = new THREE.Mesh(plane, floorMat);
     floorSegment2.receiveShadow = true;
     floorSegment2.position.set(x * options.scale, 0, z * options.scale);
     floorSegment2.rotation.y = -90 * Math.PI / 180;
