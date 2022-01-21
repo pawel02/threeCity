@@ -73,6 +73,7 @@ const floorGeometry = new THREE.PlaneGeometry(100, 100);
 let floor = new THREE.Object3D();
 let town = new THREE.Object3D();
 let city = new THREE.Object3D();
+let particles = new THREE.Object3D();
 
 // Add the floor
 const floorMat = new THREE.MeshStandardMaterial({color:0x000000});
@@ -188,32 +189,40 @@ for (let i = 0; i < options.buildingAmount; i++)
 city.add(floor);
 city.add(town);
 
+// Create the particles
+let gmaterial = new THREE.MeshToonMaterial({color:0xFFFF00, side:THREE.DoubleSide});
+let gparticle = new THREE.SphereGeometry(0.005);
+let particleMultiple = 10;
+
+for (var h = 1; h < 300; h++) {
+  var particle = new THREE.Mesh(gparticle, gmaterial);
+  particle.position.set((Math.random() * particleMultiple) - particleMultiple / 2, (Math.random() * particleMultiple) - particleMultiple / 2, (Math.random() * particleMultiple) - particleMultiple / 2);
+  particle.rotation.set(Math.random() * particleMultiple, Math.random() * particleMultiple, Math.random() * particleMultiple);
+  particles.add(particle);
+}
+
+particles.position.y = 2;
+
 scene.add(city);
-var uSpeed = 0.001;
+scene.add(particles);
+
 var mouse = new THREE.Vector2(), INTERSECTED;
 
 function onMouseMove(event) {
     event.preventDefault();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-};
-function onDocumentTouchStart( event ) {
-if ( event.touches.length == 1 ) {
-    event.preventDefault();
-    mouse.x = event.touches[ 0 ].pageX -  window.innerWidth / 2;
-    mouse.y = event.touches[ 0 ].pageY - window.innerHeight / 2;
-};
-};
-function onDocumentTouchMove( event ) {
-if ( event.touches.length == 1 ) {
-    event.preventDefault();
-    mouse.x = event.touches[ 0 ].pageX -  window.innerWidth / 2;
-    mouse.y = event.touches[ 0 ].pageY - window.innerHeight / 2;
 }
+function onTouchStart( event ) {
+  if ( event.touches.length == 1 ) {
+      event.preventDefault();
+      mouse.x = (event.touches[ 0 ].pageX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.touches[ 0 ].pageY / window.innerHeight) * 2 + 1;
+  }
 }
+
 window.addEventListener('mousemove', onMouseMove, false);
-window.addEventListener('touchstart', onDocumentTouchStart, false );
-window.addEventListener('touchmove', onDocumentTouchMove, false );
+window.addEventListener('touchstart', onTouchStart, false );
 
 const clock = new THREE.Clock();
 
@@ -228,6 +237,9 @@ function animate()
   if (city.rotation.x < -0.5) city.rotation.x = -0.5;
   else if (city.rotation.x > 0.2) city.rotation.x = 0.2;
 
+  particles.rotation.y += 0.5 * delta;
+  particles.rotation.x += 0.5 * delta;
+  
   camera.lookAt(city.position.x / 2, city.position.y, city.position.z / 2);
 
   renderer.render(scene, camera);
