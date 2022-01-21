@@ -9,7 +9,7 @@ const options = {
   gridAmount: 20,
   buildingAmount: 50,
   scale: 0.8,
-  cameraSpeed: 0.6
+  cameraSpeed: 0.2
 };
 
 const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 500);
@@ -29,14 +29,14 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize( window.innerWidth, window.innerHeight );
-};
+}
 
 camera.rotation.set(-0.5, 0, 0);
 camera.position.set(0, 10, 15);
 
 // basic lighting
-const ambientLight = new THREE.AmbientLight(0xFFFFFF, 20);
-var lightFront = new THREE.SpotLight(0xFFFFFF, 20, 50);
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 4);
+var lightFront = new THREE.SpotLight(0xFFFFFF, 10, 50);
 var lightBack = new THREE.PointLight(0xFFFFFF, 0.5);
 lightBack.position.set(0,6,0);
 
@@ -58,7 +58,7 @@ scene.add(ambientLight, lightFront, lightBack);
 // Create the fog
 const fog = 0xF02050;
 scene.background = new THREE.Color(fog);
-scene.fog = new THREE.Fog(fog, 10, 19);
+//scene.fog = new THREE.Fog(fog, 10, 19);
 
 const plane = new THREE.BoxGeometry(0.01, 0.01, 1);
 const floorGeometry = new THREE.PlaneGeometry(100, 100);
@@ -123,7 +123,7 @@ for (let x = -options.gridAmount; x < options.gridAmount; x++)
 }
 
 // Create the town
-const outlineMat =  new THREE.MeshStandardMaterial({color:0x010101, wireframe: true});
+const outlineMat =  new THREE.MeshStandardMaterial({color:0x060606, wireframe: true});
 const buildingMat = new THREE.MeshPhysicalMaterial({color:0x000000, metalness: 0.2, roughness: 0.8});
 
 const cube = new THREE.BoxGeometry(2 * options.scale, 1 * options.scale, 2 * options.scale, 2, 2, 2);
@@ -144,8 +144,8 @@ for (let i = 0; i < options.buildingAmount; i++)
   let building = new THREE.Mesh(cube, buildingMat);
   let base = new THREE.Mesh(cube, buildingMat);
   let outline = new THREE.Mesh(cube, outlineMat);
-  base.add(building);
-  base.add(outline);
+  //base.add(building);
+  //base.add(outline);
 
   let position = pairs[Math.floor(Math.random() * pairs.length)];
   if (usedPairs.indexOf(position) > -1)
@@ -199,7 +199,7 @@ particles.position.y = 2;
 scene.add(city);
 scene.add(particles);
 
-var mouse = new THREE.Vector2(), INTERSECTED;
+var mouse = new THREE.Vector2();
 
 function onMouseMove(event) {
     event.preventDefault();
@@ -214,6 +214,31 @@ function onTouchStart( event ) {
   }
 }
 
+var createCars = function(spread = 3, scale = 2, length = 10, color = 0xFFFF00) 
+{
+  // Create long lines in a square around the point
+  const geo = new THREE.BoxGeometry(0.05, scale, 0.05);
+  const mat = new THREE.MeshStandardMaterial({color});
+
+  let mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(0, 2, length);
+  // mesh.rotation.x = 90 * Math.PI / 180; +X
+  // mesh.rotation.z = 90 * Math.PI / 180;
+
+
+  // mesh.rotation.x = 90 * Math.PI / 180; -X
+  // mesh.rotation.z = -90 * Math.PI / 180;  
+
+  //mesh.rotation.x = 90 * Math.PI / 180; // +y
+
+  //mesh.rotation.x = -90 * Math.PI / 180; // -y
+
+  city.add(mesh);
+}
+
+createCars();
+
+
 window.addEventListener('mousemove', onMouseMove, false);
 window.addEventListener('touchstart', onTouchStart, false );
 
@@ -226,12 +251,12 @@ function animate()
   const delta = clock.getDelta();
 
   city.rotation.y -= mouse.x * options.cameraSpeed * delta;
-  city.rotation.x -= -mouse.y * options.cameraSpeed * delta;
+  city.rotation.x -= -mouse.y * (options.cameraSpeed * 0.3) * delta;
   if (city.rotation.x < -0.5) city.rotation.x = -0.5;
   else if (city.rotation.x > 0.2) city.rotation.x = 0.2;
 
-  particles.rotation.y += 0.5 * delta;
-  particles.rotation.x += 0.5 * delta;
+  particles.rotation.y += 0.1 * delta;
+  particles.rotation.x += 0.1 * delta;
   
   camera.lookAt(city.position.x / 2, city.position.y, city.position.z / 2);
 
