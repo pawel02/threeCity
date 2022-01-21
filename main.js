@@ -2,7 +2,6 @@
 import './style.css';
 import * as THREE from 'three';
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Reflector } from 'three/examples/jsm/objects/Reflector';
 
 const scene = new THREE.Scene();
@@ -10,11 +9,11 @@ const scene = new THREE.Scene();
 const options = {
   gridAmount: 20,
   buildingAmount: 50,
-  scale: 0.8
+  scale: 0.8,
+  cameraSpeed: 0.8
 };
 
 const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 500);
-const controls = new OrbitControls(camera, document.querySelector("#bg"));
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector("#bg"),
@@ -34,12 +33,9 @@ function onWindowResize() {
 };
 
 camera.rotation.set(-0.5, 0, 0);
-camera.position.set(0, 10, 10);
+camera.position.set(0, 10, 15);
 
 /*
-Geometry:
-Add some buildings with random heights made up of simple cubes, these should have wireframe on them
-
 Effects:
 add fog with an orange color
 try out different particle effects
@@ -131,9 +127,10 @@ for(let x = -buildingSize; x < buildingSize; x++)
 for (let i = 0; i < options.buildingAmount; i++)
 {
   let building = new THREE.Mesh(cube, buildingMat);
+  let base = new THREE.Mesh(cube, buildingMat);
   let outline = new THREE.Mesh(cube, outlineMat);
-  building.add(outline);
-
+  base.add(building);
+  base.add(outline);
 
   let position = pairs[Math.floor(Math.random() * pairs.length)];
   if (usedPairs.indexOf(position) > -1)
@@ -142,17 +139,28 @@ for (let i = 0; i < options.buildingAmount; i++)
   }
   usedPairs.push(position);
   
-  const scaleY = Math.floor((Math.random() * 5) + 1);
+  const scaleY = Math.floor((Math.random() * 50) + 10);
 
-  building.scale.y     = scaleY;
+  base.scale.y     = 0.1;
+  base.position.y  = 0.05;
+
+  building.scale.y = scaleY;
+  building.scale.x = 0.9;
+  building.scale.z = 0.9;
   building.position.y  += Math.abs(scaleY * options.scale) / 2;
-  building.castShadow = true;
-  building.receiveShadow = true;
 
-  building.position.x = position[0];
-  building.position.z = position[1];
+  outline.scale.y = scaleY;
+  outline.scale.x = 0.9;
+  outline.scale.z = 0.9;
+  outline.position.y  += Math.abs(scaleY * options.scale) / 2;
+
+  base.castShadow = true;
+  base.receiveShadow = true;
+
+  base.position.x = position[0];
+  base.position.z = position[1];
   
-  town.add(building);
+  town.add(base);
 }
 
 // Add everything into the scene
@@ -186,17 +194,20 @@ window.addEventListener('mousemove', onMouseMove, false);
 window.addEventListener('touchstart', onDocumentTouchStart, false );
 window.addEventListener('touchmove', onDocumentTouchMove, false );
 
+const clock = new THREE.Clock();
 
 function animate()
 {
   requestAnimationFrame(animate);
 
-   city.rotation.y -= mouse.x * 0.01;
-   city.rotation.x -= -mouse.y * 0.01;
-   if (city.rotation.x < -0.5) city.rotation.x = -0.5;
-   else if (city.rotation.x > 0.2) city.rotation.x = 0.2;
-  
-   camera.lookAt(city.position.x / 2, city.position.y, city.position.z / 2);
+  const delta = clock.getDelta();
+
+  city.rotation.y -= mouse.x * options.cameraSpeed * delta;
+  city.rotation.x -= -mouse.y * options.cameraSpeed * delta;
+  if (city.rotation.x < -0.5) city.rotation.x = -0.5;
+  else if (city.rotation.x > 0.2) city.rotation.x = 0.2;
+
+  camera.lookAt(city.position.x / 2, city.position.y, city.position.z / 2);
 
   renderer.render(scene, camera);
 }
