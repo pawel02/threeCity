@@ -1,0 +1,13 @@
+body, html
+{
+  padding:0;
+  margin:0;
+  background-color:#121212;
+}
+
+canvas
+{
+  position:fixed;
+  width:100vw;
+  height:100vh;
+}
