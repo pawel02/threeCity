@@ -1,4 +1,3 @@
-//Try to recreate something like https://codepen.io/vcomics/pen/aGmoae
 import './style.css';
 import * as THREE from 'three';
 
@@ -34,12 +33,6 @@ function onWindowResize() {
 
 camera.rotation.set(-0.5, 0, 0);
 camera.position.set(0, 10, 15);
-
-/*
-Effects:
-add fog with an orange color
-try out different particle effects
-*/
 
 // basic lighting
 const ambientLight = new THREE.AmbientLight(0xFFFFFF, 20);
@@ -191,7 +184,7 @@ city.add(town);
 
 // Create the particles
 let gmaterial = new THREE.MeshToonMaterial({color:0xFFFF00, side:THREE.DoubleSide});
-let gparticle = new THREE.SphereGeometry(0.005);
+let gparticle = new THREE.SphereGeometry(0.008);
 let particleMultiple = 10;
 
 for (var h = 1; h < 300; h++) {
