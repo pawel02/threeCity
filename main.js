@@ -8,8 +8,8 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector';
 const scene = new THREE.Scene();
 
 const options = {
-  gridAmount: 16,
-  buildingAmount: 20,
+  gridAmount: 20,
+  buildingAmount: 50,
   scale: 0.8
 };
 
@@ -34,8 +34,7 @@ function onWindowResize() {
 };
 
 camera.rotation.set(-0.5, 0, 0);
-camera.position.setZ(10);
-camera.position.setY(10);
+camera.position.set(0, 10, 10);
 
 /*
 Geometry:
@@ -70,7 +69,7 @@ scene.add(ambientLight, lightFront, lightBack);
 // Create the fog
 const fog = 0xF02050;
 scene.background = new THREE.Color(fog);
-scene.fog = new THREE.Fog(fog, 15, 26);
+scene.fog = new THREE.Fog(fog, 10, 16);
 
 const plane = new THREE.BoxGeometry(0.01, 0.01, 1);
 const floorGeometry = new THREE.PlaneGeometry(100, 100);
@@ -117,15 +116,32 @@ const outlineMat =  new THREE.MeshStandardMaterial({color:0x010101, wireframe: t
 const buildingMat = new THREE.MeshPhysicalMaterial({color:0x000000, metalness: 0.2, roughness: 0.8});
 
 const cube = new THREE.BoxGeometry(2 * options.scale, 1 * options.scale, 2 * options.scale, 2, 2, 2);
+
+let usedPairs = [];
+
+const buildingSize = Math.floor(options.gridAmount - 10) / 2;
+let pairs = [];
+for(let x = -buildingSize; x < buildingSize; x++)
+{
+  for(let y = -buildingSize; y < buildingSize; y++)
+  {
+    pairs.push([x * options.scale * 2, y * options.scale * 2]);
+  }
+}
 for (let i = 0; i < options.buildingAmount; i++)
 {
   let building = new THREE.Mesh(cube, buildingMat);
   let outline = new THREE.Mesh(cube, outlineMat);
   building.add(outline);
 
-  const buildingSize = options.gridAmount - 10;
-  const posX = Math.floor((Math.random() * buildingSize * 2) - buildingSize ) * options.scale;
-  const posZ = Math.floor((Math.random() * buildingSize * 2) - buildingSize ) * options.scale;
+
+  let position = pairs[Math.floor(Math.random() * pairs.length)];
+  if (usedPairs.indexOf(position) > -1)
+  {
+    continue;
+  }
+  usedPairs.push(position);
+  
   const scaleY = Math.floor((Math.random() * 5) + 1);
 
   building.scale.y     = scaleY;
@@ -133,8 +149,8 @@ for (let i = 0; i < options.buildingAmount; i++)
   building.castShadow = true;
   building.receiveShadow = true;
 
-  building.position.x = posX;
-  building.position.z = posZ;
+  building.position.x = position[0];
+  building.position.z = position[1];
   
   town.add(building);
 }
@@ -170,6 +186,7 @@ window.addEventListener('mousemove', onMouseMove, false);
 window.addEventListener('touchstart', onDocumentTouchStart, false );
 window.addEventListener('touchmove', onDocumentTouchMove, false );
 
+
 function animate()
 {
   requestAnimationFrame(animate);
@@ -177,9 +194,9 @@ function animate()
    city.rotation.y -= mouse.x * 0.01;
    city.rotation.x -= -mouse.y * 0.01;
    if (city.rotation.x < -0.5) city.rotation.x = -0.5;
-   else if (city.rotation.x > 0.75) city.rotation.x = 0.75;
+   else if (city.rotation.x > 0.2) city.rotation.x = 0.2;
   
-   camera.lookAt(city.position);
+   camera.lookAt(city.position.x / 2, city.position.y, city.position.z / 2);
 
   renderer.render(scene, camera);
 }
