@@ -147,11 +147,10 @@ for (let i = 0; i < options.buildingAmount; i++)
   base.add(building);
   base.add(outline);
 
-  let position = pairs[Math.floor(Math.random() * pairs.length)];
-  if (usedPairs.indexOf(position) > -1)
-  {
-    continue;
-  }
+  const randNum = Math.floor(Math.random() * pairs.length);
+  let position = pairs[randNum].slice();
+  pairs.splice(randNum, 1);
+
   usedPairs.push(position);
   
   const scaleY = Math.floor((Math.random() * 50) + 10);
