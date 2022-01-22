@@ -58,7 +58,7 @@ scene.add(ambientLight, lightFront, lightBack);
 // Create the fog
 const fog = 0xF02050;
 scene.background = new THREE.Color(fog);
-//scene.fog = new THREE.Fog(fog, 10, 19);
+scene.fog = new THREE.Fog(fog, 10, 16);
 
 const plane = new THREE.BoxGeometry(0.01, 0.01, 1);
 const floorGeometry = new THREE.PlaneGeometry(100, 100);
@@ -144,8 +144,8 @@ for (let i = 0; i < options.buildingAmount; i++)
   let building = new THREE.Mesh(cube, buildingMat);
   let base = new THREE.Mesh(cube, buildingMat);
   let outline = new THREE.Mesh(cube, outlineMat);
-  //base.add(building);
-  //base.add(outline);
+  base.add(building);
+  base.add(outline);
 
   let position = pairs[Math.floor(Math.random() * pairs.length)];
   if (usedPairs.indexOf(position) > -1)
@@ -183,7 +183,7 @@ city.add(floor);
 city.add(town);
 
 // Create the particles
-let gmaterial = new THREE.MeshToonMaterial({color:0xFFFF00, side:THREE.DoubleSide});
+let gmaterial = new THREE.MeshToonMaterial({color:0x111111, side:THREE.DoubleSide});
 let gparticle = new THREE.SphereGeometry(0.008);
 let particleMultiple = 10;
 
@@ -200,7 +200,6 @@ scene.add(city);
 scene.add(particles);
 
 var mouse = new THREE.Vector2();
-
 function onMouseMove(event) {
     event.preventDefault();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -214,36 +213,10 @@ function onTouchStart( event ) {
   }
 }
 
-var createCars = function(spread = 3, scale = 2, length = 10, color = 0xFFFF00) 
-{
-  // Create long lines in a square around the point
-  const geo = new THREE.BoxGeometry(0.05, scale, 0.05);
-  const mat = new THREE.MeshStandardMaterial({color});
-
-  let mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(0, 2, length);
-  // mesh.rotation.x = 90 * Math.PI / 180; +X
-  // mesh.rotation.z = 90 * Math.PI / 180;
-
-
-  // mesh.rotation.x = 90 * Math.PI / 180; -X
-  // mesh.rotation.z = -90 * Math.PI / 180;  
-
-  //mesh.rotation.x = 90 * Math.PI / 180; // +y
-
-  //mesh.rotation.x = -90 * Math.PI / 180; // -y
-
-  city.add(mesh);
-}
-
-createCars();
-
-
 window.addEventListener('mousemove', onMouseMove, false);
 window.addEventListener('touchstart', onTouchStart, false );
 
 const clock = new THREE.Clock();
-
 function animate()
 {
   requestAnimationFrame(animate);
@@ -257,7 +230,7 @@ function animate()
 
   particles.rotation.y += 0.1 * delta;
   particles.rotation.x += 0.1 * delta;
-  
+
   camera.lookAt(city.position.x / 2, city.position.y, city.position.z / 2);
 
   renderer.render(scene, camera);
