@@ -89,8 +89,7 @@ window.onload = () => {
   let particles = new THREE.Object3D();
 
   // Add the floor
-  const floorMat = new THREE.MeshStandardMaterial({color:0x000000});
-  const floorMatRed = new THREE.MeshStandardMaterial({color:0xff0000});
+  const floorMat = new THREE.MeshStandardMaterial({color:0xa200ff});
 
   const floorMesh = new Reflector(floorGeometry, {
     clipBias: 0.003,
@@ -109,27 +108,8 @@ window.onload = () => {
   {
     for (let z = -options.gridAmount; z < options.gridAmount; z++)
     {
-      let floorSegment;
-      let floorSegment2;
-
-      // Create the red lines that go across the y and x axis
-      if (x == 0)
-      {
-        floorSegment = new THREE.Mesh(plane, floorMatRed);
-      }
-      else
-      {
-        floorSegment = new THREE.Mesh(plane, floorMat);
-      }
-
-      if (z == 0)
-      {
-        floorSegment2 = new THREE.Mesh(plane, floorMatRed);
-      }
-      else
-      {
-        floorSegment2 = new THREE.Mesh(plane, floorMat);  
-      }
+      const floorSegment = new THREE.Mesh(plane, floorMat);
+      const floorSegment2 = new THREE.Mesh(plane, floorMat);  
 
       floorSegment.receiveShadow = true;
       floorSegment.position.set(x * options.scale, 0, z * options.scale);
@@ -143,8 +123,8 @@ window.onload = () => {
   }
 
   // Create the town
-  const outlineMat =  new THREE.MeshStandardMaterial({color:0x060606, wireframe: true});
-  const buildingMat = new THREE.MeshPhysicalMaterial({color:0x000000, metalness: 0.2, roughness: 0.8});
+  const outlineMat =  new THREE.MeshStandardMaterial({color:0x090909, wireframe: true});
+  const buildingMat = new THREE.MeshPhysicalMaterial({color:0x050505, metalness: 1, roughness: 0.6});
 
   const cube = new THREE.BoxGeometry(2 * options.scale, 1 * options.scale, 2 * options.scale, 2, 2, 2);
 
