@@ -37,7 +37,8 @@ window.onload = () => {
     gridAmount: 20,
     buildingAmount: 50,
     scale: 0.8,
-    cameraSpeed: 0.2
+    cameraSpeed: 0.2,
+    carsAmount: 50
   };
 
 
@@ -76,7 +77,7 @@ window.onload = () => {
   lightFront.shadow.camera.fov = 30;
 
   // Create the fog
-  const fog = 0xF02050;
+  const fog = 0x8100fa;
   scene.background = new THREE.Color(fog);
   scene.fog = new THREE.Fog(fog, 10, 16);
 
@@ -85,6 +86,7 @@ window.onload = () => {
 
   let floor = new THREE.Object3D();
   let town = new THREE.Object3D();
+  let cars = new THREE.Object3D();
   let city = new THREE.Object3D();
   let particles = new THREE.Object3D();
 
@@ -125,8 +127,10 @@ window.onload = () => {
   // Create the town
   const outlineMat =  new THREE.MeshStandardMaterial({color:0x090909, wireframe: true});
   const buildingMat = new THREE.MeshPhysicalMaterial({color:0x050505, metalness: 1, roughness: 0.6});
+  const carMat = new THREE.MeshStandardMaterial({color:0xffff00});
 
   const cube = new THREE.BoxGeometry(2 * options.scale, 1 * options.scale, 2 * options.scale, 2, 2, 2);
+  const carGeo = new THREE.BoxGeometry(0.01, 0.01, 1);
 
   // Create a list of all possible building positions
   const buildingSize = Math.floor(options.gridAmount - 10) / 2;
@@ -137,6 +141,85 @@ window.onload = () => {
     {
       pairs.push([x * options.scale * 2, y * options.scale * 2]);
     }
+  }
+
+  const mCars = [];
+  const carResetLength = options.gridAmount * options.scale;
+
+  for(let x = 0; x < options.carsAmount; x++)
+  {
+    let car = new THREE.Mesh(carGeo, carMat);
+
+    // Choose a random direciton for the car
+    const carDir = Math.floor(Math.random() * 3);
+    const carPos = ((Math.floor(Math.random() * buildingSize * 2)) - buildingSize) * 2;
+    const speed = (Math.random() * 20) + 10;
+    const carY = (Math.random() * 4);
+
+    if (carDir === 0)
+    {
+      car.position.set(carPos, carY, -carResetLength);
+      mCars.push({
+        car,
+        speed,
+        move: (delta, self) => {
+          self.car.position.z += self.speed * delta;
+          if (self.car.position.z > carResetLength)
+          {
+            self.car.position.z = -carResetLength;
+          }
+        }
+      });
+    }
+    else if (carDir === 1)
+    {
+      car.position.set(carPos, carY, carResetLength);
+      mCars.push({
+        car,
+        speed,
+        move: (delta, self) => {
+          self.car.position.z -= self.speed * delta;
+          if (self.car.position.z < -carResetLength)
+          {
+            self.car.position.z = carResetLength;
+          }
+        }
+      });
+    }
+    else if (carDir === 2)
+    {
+      car.position.set(carResetLength, carY, carPos);
+      car.rotation.y = 90 * Math.PI / 180;
+      mCars.push({
+        car,
+        speed,
+        move: (delta, self) => {
+          self.car.position.x -= self.speed * delta;
+          if (self.car.position.x < -carResetLength)
+          {
+            self.car.position.x = carResetLength;
+          }
+        }
+      });
+    }
+    else
+    {
+      car.position.set(-carResetLength, carY, carPos);
+      car.rotation.y = 90 * Math.PI / 180;
+      mCars.push({
+        car,
+        speed,
+        move: (delta, self) => {
+          self.car.position.x += self.speed * delta;
+          if (self.car.position.x > carResetLength)
+          {
+            self.car.position.x = -carResetLength;
+          }
+        }
+      });
+    }
+
+    cars.add(car);
   }
 
   // Create all the buildings
@@ -183,6 +266,7 @@ window.onload = () => {
   // Add the floor and the buildings into the city
   city.add(floor);
   city.add(town);
+  city.add(cars);
 
   // Create the particles
   let gmaterial = new THREE.MeshToonMaterial({color:0x111111, side:THREE.DoubleSide});
@@ -218,6 +302,11 @@ window.onload = () => {
     // Move the particles around
     particles.rotation.y += 0.1 * delta;
     particles.rotation.x += 0.1 * delta;
+
+    for (let c of mCars)
+    {
+      c.move(delta, c);
+    }
 
     // Always look into the middle of the city
     camera.lookAt(city.position.x / 2, city.position.y, city.position.z / 2);
