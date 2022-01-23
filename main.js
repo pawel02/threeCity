@@ -37,7 +37,7 @@ window.onload = () => {
     gridAmount: 20,
     buildingAmount: 50,
     scale: 0.8,
-    cameraSpeed: 0.2,
+    cameraSpeed: 0.4,
     carsAmount: 50
   };
 
@@ -59,7 +59,7 @@ window.onload = () => {
   const ambientLight = new THREE.AmbientLight(0xFFFFFF, 4);
 
   // Light will always be statically positioned as we are moving the city and not the camera
-  var lightFront = new THREE.SpotLight(0xFFFFFF, 10, 50);
+  var lightFront = new THREE.SpotLight(0xFFFFFF, 30, 50);
   var lightBack = new THREE.PointLight(0xFFFFFF, 0.5);
   lightBack.position.set(0,6,0);
 
@@ -77,11 +77,11 @@ window.onload = () => {
   lightFront.shadow.camera.fov = 30;
 
   // Create the fog
-  const fog = 0xfc8235;
+  const fog = 0xff2050;
   scene.background = new THREE.Color(fog);
-  scene.fog = new THREE.Fog(fog, 10, 16);
+  scene.fog = new THREE.Fog(fog, 11, 17);
 
-  const plane = new THREE.BoxGeometry(0.01, 0.01, 1);
+  const plane = new THREE.BoxGeometry(0.005, 0.005, 1);
   const floorGeometry = new THREE.PlaneGeometry(100, 100);
 
   let floor = new THREE.Object3D();
