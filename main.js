@@ -37,7 +37,7 @@ window.onload = () => {
     gridAmount: 20,
     buildingAmount: 50,
     scale: 0.8,
-    cameraSpeed: 0.4,
+    cameraSpeed: 0.2,
     carsAmount: 50
   };
 
@@ -53,18 +53,18 @@ window.onload = () => {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   camera.rotation.set(-0.5, 0, 0);
-  camera.position.set(0, 10, 15);
+  camera.position.set(0, 10, 16);
 
   // basic lighting
   const ambientLight = new THREE.AmbientLight(0xFFFFFF, 4);
 
   // Light will always be statically positioned as we are moving the city and not the camera
-  var lightFront = new THREE.SpotLight(0xFFFFFF, 30, 50);
-  var lightBack = new THREE.PointLight(0xFFFFFF, 0.5);
+  var lightFront = new THREE.SpotLight(0xFFFFFF, 10, 50);
+  var lightBack = new THREE.PointLight(0xFFFFFF, 1);
   lightBack.position.set(0,6,0);
 
   lightFront.position.set(5, 10, 5);
-  lightFront.rotation.x = 45 * Math.PI / 180;
+  lightFront.rotation.x = 25 * Math.PI / 180;
   lightFront.rotation.z = -45 * Math.PI / 180;
   lightFront.castShadow = true;
   lightFront.penumbra = 0.1;
@@ -77,9 +77,9 @@ window.onload = () => {
   lightFront.shadow.camera.fov = 30;
 
   // Create the fog
-  const fog = 0xff2050;
+  const fog = 0x8100fa;
   scene.background = new THREE.Color(fog);
-  scene.fog = new THREE.Fog(fog, 11, 17);
+  scene.fog = new THREE.Fog(fog, 14, 20);
 
   const plane = new THREE.BoxGeometry(0.005, 0.005, 1);
   const floorGeometry = new THREE.PlaneGeometry(100, 100);
@@ -126,7 +126,7 @@ window.onload = () => {
 
   // Create the town
   const outlineMat =  new THREE.MeshStandardMaterial({color:0x090909, wireframe: true});
-  const buildingMat = new THREE.MeshPhysicalMaterial({color:0x050505, metalness: 1, roughness: 0.6});
+  const buildingMat = new THREE.MeshPhongMaterial({color:0x020202, shininess: 100});
   const carMat = new THREE.MeshStandardMaterial({color:0xffff00});
 
   const cube = new THREE.BoxGeometry(2 * options.scale, 1 * options.scale, 2 * options.scale, 2, 2, 2);
@@ -246,11 +246,15 @@ window.onload = () => {
     building.scale.y = scaleY;
     building.scale.x = 0.9;
     building.scale.z = 0.9;
+    building.castShadow = true;
+    building.receiveShadow = true;
     building.position.y  += Math.abs(scaleY * options.scale) / 2;
 
     outline.scale.y = scaleY;
     outline.scale.x = 0.9;
     outline.scale.z = 0.9;
+    outline.castShadow = true;
+    outline.receiveShadow = true;
     outline.position.y  += Math.abs(scaleY * options.scale) / 2;
 
     base.castShadow = true;
