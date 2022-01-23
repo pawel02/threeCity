@@ -77,7 +77,7 @@ window.onload = () => {
   lightFront.shadow.camera.fov = 30;
 
   // Create the fog
-  const fog = 0x8100fa;
+  const fog = 0xfc8235;
   scene.background = new THREE.Color(fog);
   scene.fog = new THREE.Fog(fog, 10, 16);
 
@@ -91,7 +91,7 @@ window.onload = () => {
   let particles = new THREE.Object3D();
 
   // Add the floor
-  const floorMat = new THREE.MeshStandardMaterial({color:0xa200ff});
+  const floorMat = new THREE.MeshStandardMaterial({color:0xffffff});
 
   const floorMesh = new Reflector(floorGeometry, {
     clipBias: 0.003,
@@ -154,7 +154,7 @@ window.onload = () => {
     const carDir = Math.floor(Math.random() * 3);
     const carPos = ((Math.floor(Math.random() * buildingSize * 2)) - buildingSize) * 2;
     const speed = (Math.random() * 20) + 10;
-    const carY = (Math.random() * 4);
+    const carY = (Math.random() * 4) + 1;
 
     if (carDir === 0)
     {

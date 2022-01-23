@@ -8,6 +8,7 @@ nav
   display:flex;
   justify-content: space-between;
   width:250px;
+  z-index:1;
 }
 a
 {
