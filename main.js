@@ -3,6 +3,9 @@ import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector';
 
 var mouse = new THREE.Vector2();
+let renderer;
+const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 500);
+
 function onMouseMove(event) {
     event.preventDefault();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -36,9 +39,8 @@ window.onload = () => {
     cameraSpeed: 0.2
   };
 
-  const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 500);
 
-  const renderer = new THREE.WebGLRenderer({
+  renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector("#bg"),
     antialias: true
   });
