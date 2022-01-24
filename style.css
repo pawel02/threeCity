@@ -22,3 +22,17 @@ a
   text-decoration: none;
   cursor: pointer;
 }
+
+
+.center
+{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.separator
+{
+  height:1px;
+  background-color:white;
+}
