@@ -6,6 +6,7 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector';
 var mouse = new THREE.Vector2();
 let renderer;
 const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 500);
+const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 function onMouseMove(event) {
     event.preventDefault();
@@ -27,8 +28,11 @@ function onWindowResize() {
 }
 
 window.onload = () => {
-  window.addEventListener('mousemove', onMouseMove, false);
-  window.addEventListener('touchstart', onTouchStart, false );
+  if (mediaQuery || !mediaQuery.matches) {
+    window.addEventListener('mousemove', onMouseMove, false);
+    window.addEventListener('touchstart', onTouchStart, false );
+  }
+  
   window.addEventListener('resize', onWindowResize, false);
 
   const scene = new THREE.Scene();
@@ -130,7 +134,7 @@ window.onload = () => {
   const carMat = new THREE.MeshStandardMaterial({color:0xffff00});
 
   const cube = new THREE.BoxGeometry(2 * options.scale, 1 * options.scale, 2 * options.scale, 2, 2, 2);
-  const carGeo = new THREE.BoxGeometry(0.01, 0.01, 1);
+  const carGeo = new THREE.BoxGeometry(0.005, 0.005, 1);
 
   // Create a list of all possible building positions
   const buildingSize = Math.floor(options.gridAmount - 10) / 2;
