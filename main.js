@@ -41,7 +41,7 @@ window.onload = () => {
     gridAmount: 20,
     buildingAmount: 50,
     scale: 0.8,
-    cameraSpeed: 0.2,
+    cameraSpeed: 0.5,
     carsAmount: 50
   };
 
@@ -57,7 +57,7 @@ window.onload = () => {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   camera.rotation.set(-0.5, 0, 0);
-  camera.position.set(0, 10, 16);
+  camera.position.set(0, 15, 12);
 
   // basic lighting
   const ambientLight = new THREE.AmbientLight(0xFFFFFF, 4);
@@ -81,9 +81,9 @@ window.onload = () => {
   lightFront.shadow.camera.fov = 30;
 
   // Create the fog
-  const fog = 0x8100fa;
+  const fog = 0x9120f0;
   scene.background = new THREE.Color(fog);
-  scene.fog = new THREE.Fog(fog, 14, 20);
+  scene.fog = new THREE.Fog(fog, 14, 18);
 
   const plane = new THREE.BoxGeometry(0.005, 0.005, 1);
   const floorGeometry = new THREE.PlaneGeometry(100, 100);
@@ -104,8 +104,10 @@ window.onload = () => {
     color: 0x777777
   });
 
+
   floorMesh.rotation.x    = -90 * Math.PI / 180;
   floorMesh.position.y    = -0.001;
+  floorMesh.castShadow    = true;
   floorMesh.receiveShadow = true;
   city.add(floorMesh);
 
@@ -242,7 +244,7 @@ window.onload = () => {
     let position = pairs[randNum].slice();
     pairs.splice(randNum, 1);
 
-    const scaleY = Math.floor((Math.random() * 50) + 10);
+    const scaleY = Math.floor((Math.random() * 60) + 20);
 
     base.scale.y     = 0.1;
     base.position.y  = 0.05;
