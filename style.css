@@ -1,9 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
-:root
-{
-  --d1:#FF9900;
-}
-
 body, html
 {
   padding:0;
@@ -16,11 +11,16 @@ body, html
   scroll-behavior: smooth;
 }
 
-
 a
 {
   text-decoration: none;
   cursor: pointer;
+  transition:0.2s;
+}
+
+a:hover
+{
+  opacity:0.8;
 }
 
 
