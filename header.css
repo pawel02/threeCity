@@ -11,6 +11,11 @@ nav
   z-index:1;
 }
 
+nav > a:hover
+{
+  opacity:0.8;
+}
+
 #explore
 {
   position:absolute;

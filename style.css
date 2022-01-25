@@ -36,12 +36,6 @@ a
   transition:0.2s;
 }
 
-a:hover
-{
-  opacity:0.8;
-}
-
-
 .center
 {
   display:flex;
