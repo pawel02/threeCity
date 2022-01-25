@@ -1,5 +1,6 @@
 import './style.css';
 import './header.css';
+import './main.css';
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector';
 
@@ -39,9 +40,9 @@ window.onload = () => {
 
   const options = {
     gridAmount: 20,
-    buildingAmount: 50,
+    buildingAmount: 60,
     scale: 0.8,
-    cameraSpeed: 0.5,
+    cameraSpeed: 0.3,
     carsAmount: 50
   };
 
@@ -63,12 +64,12 @@ window.onload = () => {
   const ambientLight = new THREE.AmbientLight(0xFFFFFF, 4);
 
   // Light will always be statically positioned as we are moving the city and not the camera
-  var lightFront = new THREE.SpotLight(0xFFFFFF, 10, 50);
+  var lightFront = new THREE.SpotLight(0xFFFFFF, 10, 80);
   var lightBack = new THREE.PointLight(0xFFFFFF, 1);
   lightBack.position.set(0,6,0);
 
-  lightFront.position.set(5, 10, 5);
-  lightFront.rotation.x = 25 * Math.PI / 180;
+  lightFront.position.set(5, 30, 10);
+  lightFront.rotation.x = 45 * Math.PI / 180;
   lightFront.rotation.z = -45 * Math.PI / 180;
   lightFront.castShadow = true;
   lightFront.penumbra = 0.1;
