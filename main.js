@@ -29,7 +29,7 @@ function onWindowResize() {
 }
 
 window.onload = () => {
-  if (mediaQuery || !mediaQuery.matches) {
+  if (!(!mediaQuery || mediaQuery.matches)) {
     window.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('touchstart', onTouchStart, false );
   }

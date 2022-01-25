@@ -135,6 +135,7 @@ a
   }
   .text-line text
   {
+    stroke-dashoffset: 0;
     animation: none;
   }
 }
