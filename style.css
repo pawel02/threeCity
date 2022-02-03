@@ -12,7 +12,7 @@ body, html
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #979797 #e0e0e0;
-  background-color:#212121;
+  background-color:#0d182a;
 }
 
 ::-webkit-scrollbar {

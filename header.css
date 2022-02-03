@@ -130,7 +130,7 @@ a
   color:white;
   position:absolute;
   left:0;
-  animation:jump 0.2s 1 ease;
+  animation:jump 0.15s 1 ease;
   text-shadow: 0px 0px 4px #000;
 }
 
