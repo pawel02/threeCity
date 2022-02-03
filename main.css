@@ -1,12 +1,12 @@
 main
 {
     width:95%;
-    margin:0 auto 250px auto;
+    margin:0 auto 30vh auto;
 }
 
 .opacity-animate
 {
-    margin-top:250px;
+    margin-top:30vh;
 }
 
 section
@@ -37,5 +37,5 @@ section p
 section svg
 {
     width:80px;
-    stroke:rgb(255,168,171);
+    stroke:#ffa8ab;
 }

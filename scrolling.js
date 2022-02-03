@@ -12,6 +12,6 @@ function handleScrollAnimation()
 }
 
 
-window.addEventListener("scroll", (val) => { 
+window.addEventListener("scroll", () => { 
   handleScrollAnimation();
 });
